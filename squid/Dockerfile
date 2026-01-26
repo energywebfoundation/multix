@@ -31,8 +31,11 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install only production dependencies
-RUN npm ci --only=production && npm cache clean --force
+# Install build dependencies, install production deps, then remove build deps
+RUN apk add --no-cache --virtual .build-deps python3 make g++ && \
+    npm ci --only=production && \
+    npm cache clean --force && \
+    apk del .build-deps
 
 # Copy built files from builder stage
 COPY --from=builder /app/lib ./lib
