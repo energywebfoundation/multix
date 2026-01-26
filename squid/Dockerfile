@@ -5,6 +5,10 @@ FROM node:18-alpine AS builder
 
 WORKDIR /app
 
+# Install build dependencies for native modules (bufferutil needs this)
+RUN apk add --no-cache python3 make g++ && \
+    ln -sf python3 /usr/bin/python
+
 # Copy package files
 COPY package*.json ./
 COPY tsconfig.json ./
@@ -31,11 +35,8 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install build dependencies, install production deps, then remove build deps
-RUN apk add --no-cache --virtual .build-deps python3 make g++ && \
-    npm ci --only=production && \
-    npm cache clean --force && \
-    apk del .build-deps
+# Copy node_modules from builder (already compiled with native modules)
+COPY --from=builder /app/node_modules ./node_modules
 
 # Copy built files from builder stage
 COPY --from=builder /app/lib ./lib
