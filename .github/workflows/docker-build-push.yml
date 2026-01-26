@@ -1,0 +1,191 @@
+name: Docker Build and Push
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag (e.g., v1.0.0)'
+        required: false
+        type: string
+
+env:
+  DOCKER_HUB_USERNAME: energyweb
+  IMAGE_NAME: multix-squid
+  DOCKER_REGISTRY: docker.io
+
+jobs:
+  build-and-push:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for version detection
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=sha,prefix={{branch}}-
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+
+      - name: Get commit hash
+        id: commit
+        run: echo "hash=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.node-version'
+
+      - name: Determine version tag with auto-increment
+        id: version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ] && [ -n "${{ github.event.inputs.version }}" ]; then
+            INPUT_VERSION="${{ github.event.inputs.version }}"
+            # Remove 'v' prefix if present for comparison
+            BASE_VERSION=$(echo "$INPUT_VERSION" | sed 's/^v//')
+            # Check if tag exists and increment if needed
+            if gh release view "$INPUT_VERSION" --repo ${{ github.repository }} 2>/dev/null; then
+              # Extract major.minor.patch
+              MAJOR=$(echo "$BASE_VERSION" | cut -d. -f1)
+              MINOR=$(echo "$BASE_VERSION" | cut -d. -f2)
+              PATCH=$(echo "$BASE_VERSION" | cut -d. -f3)
+              PATCH=$((PATCH + 1))
+              NEW_VERSION="v${MAJOR}.${MINOR}.${PATCH}"
+              echo "version=${NEW_VERSION}" >> $GITHUB_OUTPUT
+              echo "is_release=true" >> $GITHUB_OUTPUT
+            else
+              echo "version=${INPUT_VERSION}" >> $GITHUB_OUTPUT
+              echo "is_release=true" >> $GITHUB_OUTPUT
+            fi
+          elif [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            # Extract version from package.json
+            BASE_VERSION=$(node -p "require('./squid/package.json').version" 2>/dev/null || echo "0.1.0")
+            VERSION_TAG="v${BASE_VERSION}"
+            # Check if tag exists and increment patch if needed
+            if gh release view "$VERSION_TAG" --repo ${{ github.repository }} 2>/dev/null; then
+              MAJOR=$(echo "$BASE_VERSION" | cut -d. -f1)
+              MINOR=$(echo "$BASE_VERSION" | cut -d. -f2)
+              PATCH=$(echo "$BASE_VERSION" | cut -d. -f3)
+              PATCH=$((PATCH + 1))
+              BASE_VERSION="${MAJOR}.${MINOR}.${PATCH}"
+              echo "version=${BASE_VERSION}" >> $GITHUB_OUTPUT
+            else
+              echo "version=${BASE_VERSION}" >> $GITHUB_OUTPUT
+            fi
+            echo "is_release=false" >> $GITHUB_OUTPUT
+          else
+            echo "version=" >> $GITHUB_OUTPUT
+            echo "is_release=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Prepare Docker tags
+        id: docker-tags
+        run: |
+          TAGS="${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest"
+          TAGS="$TAGS
+          ${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ steps.commit.outputs.hash }}"
+          if [ -n "${{ steps.version.outputs.version }}" ]; then
+            TAGS="$TAGS
+          ${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}:v${{ steps.version.outputs.version }}"
+          fi
+          echo "tags<<EOF" >> $GITHUB_OUTPUT
+          echo "$TAGS" >> $GITHUB_OUTPUT
+          echo "${{ steps.meta.outputs.tags }}" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Build and push Docker image
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          context: ./squid
+          file: ./squid/Dockerfile
+          push: true
+          tags: ${{ steps.docker-tags.outputs.tags }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64,linux/arm64
+
+      - name: Create GitHub Release (main branch only)
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push' && steps.build.outcome == 'success'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+        run: |
+          VERSION_TAG="v${{ steps.version.outputs.version }}"
+          RELEASE_NOTES="## Multix Squid Release v${{ steps.version.outputs.version }}
+
+          **Commit:** ${{ steps.commit.outputs.hash }}
+          **Build Date:** $(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+          ### Docker Image
+          \`\`\`
+          docker pull ${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}:v${{ steps.version.outputs.version }}
+          docker pull ${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ steps.commit.outputs.hash }}
+          docker pull ${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+          \`\`\`
+
+          ### Changes
+          ${{ github.event.head_commit.message }}"
+
+          gh release create "$VERSION_TAG" \
+            --title "Release v${{ steps.version.outputs.version }}" \
+            --notes "$RELEASE_NOTES" \
+            --repo ${{ github.repository }}
+
+      - name: Create GitHub Release (manual with version)
+        if: github.event_name == 'workflow_dispatch' && steps.version.outputs.is_release == 'true' && steps.build.outcome == 'success'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+        run: |
+          RELEASE_NOTES="## Multix Squid Release ${{ steps.version.outputs.version }}
+
+          **Commit:** ${{ steps.commit.outputs.hash }}
+          **Build Date:** $(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+          ### Docker Image
+          \`\`\`
+          docker pull ${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.version }}
+          docker pull ${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ steps.commit.outputs.hash }}
+          docker pull ${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+          \`\`\`"
+
+          gh release create "${{ steps.version.outputs.version }}" \
+            --title "Release ${{ steps.version.outputs.version }}" \
+            --notes "$RELEASE_NOTES" \
+            --repo ${{ github.repository }}
+
+      - name: Output image tags
+        run: |
+          echo "## Docker Image Tags" >> $GITHUB_STEP_SUMMARY
+          echo "- \`${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest\`" >> $GITHUB_STEP_SUMMARY
+          echo "- \`${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ steps.commit.outputs.hash }}\`" >> $GITHUB_STEP_SUMMARY
+          if [ -n "${{ steps.version.outputs.version }}" ]; then
+            echo "- \`${{ env.DOCKER_HUB_USERNAME }}/${{ env.IMAGE_NAME }}:v${{ steps.version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          fi
