@@ -15,8 +15,8 @@ export const config = defineConfig({
         metadata: {
           name: 'Multix',
           description: 'The best interface to create and manage multisigs on Polkadot.',
-          url: 'https://multix.cloud',
-          icons: ['https://multix.cloud/android-chrome-192x192.png?raw=true']
+          url: 'https://multix.energywebx.com',
+          icons: ['https://multix.energywebx.com/android-chrome-192x192.png?raw=true']
         }
       },
       optionalChainIds: getAllNetworkWalletConnectNameSpaces()
