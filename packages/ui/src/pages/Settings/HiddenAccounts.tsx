@@ -6,6 +6,7 @@ import AccountSelection from '../../components/select/AccountSelection'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useHiddenAccounts } from '../../contexts/HiddenAccountsContext'
 import { useNetwork } from '../../contexts/NetworkContext'
+import { formatNetworkName } from '../../utils/formatNetworkName'
 
 const HiddenAccounts = () => {
   const { addHiddenAccount, networkHiddenAccounts, removeHiddenAccount } = useHiddenAccounts()
@@ -45,7 +46,7 @@ const HiddenAccounts = () => {
       )}
       {hasHiddenAddresses && (
         <HiddenAccountsHeaderStyled>
-          Hidden accounts for {selectedNetwork}:
+          Hidden accounts for {formatNetworkName(selectedNetwork)}:
         </HiddenAccountsHeaderStyled>
       )}
       <Grid

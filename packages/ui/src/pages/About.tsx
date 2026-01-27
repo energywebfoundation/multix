@@ -42,6 +42,20 @@ const About = ({ className }: Props) => {
           </p>
         </li>
         <li>
+          <h2>EnergyWebX</h2>
+          <p>
+            It is forked from the original Multix and modified to support EnergyWebX.
+            The code can be{' '}
+            <a
+              href="https://github.com/energywebfoundation/multix"
+              target="_blank"
+              rel="noreferrer"
+            >
+              found on GitHub
+            </a>.
+          </p>
+        </li>
+        <li>
           <h2>Permissionless</h2>
           <p>
             While Multix uses an open source indexer, the database is trust minimized and only
@@ -74,7 +88,7 @@ const About = ({ className }: Props) => {
         </Link>
       </h1>
       <h1 className="title">
-        Maintained by{' '}
+        Forked from {' '}
         <Link
           className="link"
           target="_blank"
@@ -82,6 +96,17 @@ const About = ({ className }: Props) => {
           href="https://github.com/helikon-labs"
         >
           Helikon Labs
+        </Link>
+      </h1>
+      <h1 className="title">
+        Maintained by {' '}
+        <Link
+          className="link"
+          target="_blank"
+          rel="noreferrer"
+          href="https://github.com/energywebfoundation"
+        >
+          EnergyWeb Foundation
         </Link>
       </h1>
       <h1 className="title">

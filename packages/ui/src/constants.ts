@@ -19,6 +19,7 @@ import { hydrationSVG } from './logos/hydrationSVG'
 // import { chainsAcalaSVG } from './logos/acalaSVG'
 import { nodesBifrostSVG } from './logos/bifrostSVG'
 import paseoSVG from './logos/paseoSVG.svg'
+import { nodesEwxSVG } from './logos/ewxSVG'
 // import dancelightSVG from './logos/dancelightSVG.svg'
 // import tanssiSVG from './logos/tanssiSVG.svg'
 // import { polimecSVG } from './logos/polimecSVG'
@@ -217,36 +218,49 @@ export const networkList: Record<string, NetworkInfo> = {
   //   httpGraphqlUrl: HTTP_GRAPHQL_URL,
   //   logo: nodesAstarPNG
   // },
-  'bifrost-dot': {
-    chainId: 'bifrost-polkadot',
-    explorerNetworkName: 'bifrost',
+  energywebx: {
+    chainId: 'energywebx',
+    explorerNetworkName: 'energywebx',
     rpcUrls: [
-      'wss://rpc.ibp.network/bifrost-polkadot',
-      'wss://bifrost-polkadot.dotters.network',
-      'wss://hk.p.bifrost-rpc.liebi.com/ws',
-      'wss://eu.bifrost-polkadot-rpc.liebi.com/ws'
-      // 'wss://bifrost.public.curie.radiumblock.co/ws'
+      'wss://public-rpc.mainnet.energywebx.com',
+      'wss://wnp-rpc.mainnet.energywebx.com',
+      'wss://wns-rpc.mainnet.energywebx.com',
     ],
-    httpGraphqlUrl: 'https://bifrost-polkadot.graphql.multix.cloud/graphql',
-    networkLogo: nodesBifrostSVG,
-    descriptor: 'bifrostDot',
-    genesisHash: '0x262e1b2ad728475fd6fe88e62d34c200abe6fd693931ddad144059b1eb884e5b'
+    httpGraphqlUrl: 'https://multix-graphql.energywebx.com/graphql',
+    networkLogo: nodesEwxSVG,
+    descriptor: 'dot',
+    genesisHash: '0x5a51e04b88a4784d205091aa7bada002f3e5da3045e5b05655ee4db2589c33b5'
   },
-  hydration: {
-    chainId: 'hydradx',
-    explorerNetworkName: 'hydration',
-    rpcUrls: [
-      'wss://rpc.helikon.io/hydration',
-      'wss://rpc.ibp.network/hydration',
-      'wss://hydration.dotters.network',
-      'wss://hydration-rpc.n.dwellir.com'
-      // 'wss://rpc.hydradx.cloud',
-    ],
-    httpGraphqlUrl: 'https://hydration.graphql.multix.cloud/graphql',
-    networkLogo: hydrationSVG,
-    descriptor: 'hydration',
-    genesisHash: '0xafdc188f45c71dacbaa0b62e16a91f726c7b8699a9748cdf715459de6b7f366d'
-  },
+  // 'bifrost-dot': {
+  //   chainId: 'bifrost-polkadot',
+  //   explorerNetworkName: 'bifrost',
+  //   rpcUrls: [
+  //     'wss://rpc.ibp.network/bifrost-polkadot',
+  //     'wss://bifrost-polkadot.dotters.network',
+  //     'wss://hk.p.bifrost-rpc.liebi.com/ws',
+  //     'wss://eu.bifrost-polkadot-rpc.liebi.com/ws'
+  //     // 'wss://bifrost.public.curie.radiumblock.co/ws'
+  //   ],
+  //   httpGraphqlUrl: 'https://bifrost-polkadot.graphql.multix.cloud/graphql',
+  //   networkLogo: nodesBifrostSVG,
+  //   descriptor: 'bifrostDot',
+  //   genesisHash: '0x262e1b2ad728475fd6fe88e62d34c200abe6fd693931ddad144059b1eb884e5b'
+  // },
+  // hydration: {
+  //   chainId: 'hydradx',
+  //   explorerNetworkName: 'hydration',
+  //   rpcUrls: [
+  //     'wss://rpc.helikon.io/hydration',
+  //     'wss://rpc.ibp.network/hydration',
+  //     'wss://hydration.dotters.network',
+  //     'wss://hydration-rpc.n.dwellir.com'
+  //     // 'wss://rpc.hydradx.cloud',
+  //   ],
+  //   httpGraphqlUrl: 'https://hydration.graphql.multix.cloud/graphql',
+  //   networkLogo: hydrationSVG,
+  //   descriptor: 'hydration',
+  //   genesisHash: '0xafdc188f45c71dacbaa0b62e16a91f726c7b8699a9748cdf715459de6b7f366d'
+  // },
   // interlay: {
   //   chainId: 'interlay',
   //   explorerNetworkName: 'interlay',
@@ -340,23 +354,23 @@ export const networkList: Record<string, NetworkInfo> = {
   //   pplChainDescriptor: 'wesPpl',
   //   genesisHash: '0x67f9723393ef76214df0118c34bbbd3dbebc8ed46a10973a8c969d48fe7598c9'
   // },
-  paseo: {
-    chainId: 'paseo',
-    explorerNetworkName: 'paseo',
-    rpcUrls: [
-      'wss://rpc.ibp.network/paseo',
-      'wss://paseo.dotters.network',
-      'wss://paseo-rpc.n.dwellir.com'
-      //'wss://pas-rpc.stakeworld.io',
-      //'wss://paseo.rpc.amforc.com',
-    ],
-    httpGraphqlUrl: 'https://paseo.graphql.multix.cloud/graphql',
-    pplChainRpcUrls: ['wss://people-paseo.rpc.amforc.com', 'wss://people-paseo.dotters.network'],
-    networkLogo: paseoSVG,
-    descriptor: 'paseo',
-    pplChainDescriptor: 'pasPpl',
-    genesisHash: '0x77afd6190f1554ad45fd0d31aee62aacc33c6db0ea801129acb813f913e0764f'
-  },
+  // paseo: {
+  //   chainId: 'paseo',
+  //   explorerNetworkName: 'paseo',
+  //   rpcUrls: [
+  //     'wss://rpc.ibp.network/paseo',
+  //     'wss://paseo.dotters.network',
+  //     'wss://paseo-rpc.n.dwellir.com'
+  //     //'wss://pas-rpc.stakeworld.io',
+  //     //'wss://paseo.rpc.amforc.com',
+  //   ],
+  //   httpGraphqlUrl: 'https://paseo.graphql.multix.cloud/graphql',
+  //   pplChainRpcUrls: ['wss://people-paseo.rpc.amforc.com', 'wss://people-paseo.dotters.network'],
+  //   networkLogo: paseoSVG,
+  //   descriptor: 'paseo',
+  //   pplChainDescriptor: 'pasPpl',
+  //   genesisHash: '0x77afd6190f1554ad45fd0d31aee62aacc33c6db0ea801129acb813f913e0764f'
+  // },
   // amplitude: {
   //   chainId: 'amplitude',
   //   explorerNetworkName: 'amplitude',
@@ -437,12 +451,13 @@ export const networkList: Record<string, NetworkInfo> = {
 
 export const polkadotNetworksAndParachains: Partial<keyof typeof networkList>[] = [
   'polkadot',
-  'asset-hub-polkadot',
+  // 'asset-hub-polkadot',
   // 'coretime-polkadot',
   // 'acala',
   // 'astar',
-  'bifrost-dot',
-  'hydration'
+  // 'bifrost-dot',
+  // 'hydration',
+  'energywebx'
   // 'interlay',
   // 'kilt',
   // 'moonbeam',
@@ -452,8 +467,8 @@ export const polkadotNetworksAndParachains: Partial<keyof typeof networkList>[] 
   // 'watr'
 ]
 export const kusamaNetworksAndParachains: Partial<keyof typeof networkList>[] = [
-  'kusama',
-  'asset-hub-kusama'
+  // 'kusama',
+  // 'asset-hub-kusama'
   // 'coretime-kusama'
   // 'amplitude',
   // 'khala'
@@ -463,12 +478,13 @@ export const soloChains: Partial<keyof typeof networkList>[] = [
   // 'tanssi',
 ]
 export const testChains: Partial<keyof typeof networkList>[] = [
-  'paseo'
+  // 'paseo'
   // 'rhala testnet',
   // 'westend',
   // 'asset-hub-westend',
   // 'local',
-  // 'dancelight'
+  // 'dancelight',
+  // 'energywebx-paseo' // If EWX has a testnet version
 ]
 
 export type SupportedNetworks = keyof typeof networkList

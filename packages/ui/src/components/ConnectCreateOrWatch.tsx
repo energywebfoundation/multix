@@ -6,6 +6,7 @@ import { WATCH_ACCOUNT_ANCHOR } from '../pages/Settings/Settings'
 import { useWatchedAccounts } from '../contexts/WatchedAccountsContext'
 import { useNetwork } from '../contexts/NetworkContext'
 import { useAccounts } from '../contexts/AccountsContext'
+import { formatNetworkName } from '../utils/formatNetworkName'
 
 export const ConnectOrWatch = () => {
   const { setIsConnectionDialogOpen, isAllowedToConnectToExtension, allowConnectionToExtension } =
@@ -20,7 +21,7 @@ export const ConnectOrWatch = () => {
       {isAllowedToConnectToExtension || watchedAddresses.length !== 0 ? (
         <div data-cy="label-no-multisig-found">
           No multisig found for your accounts or watched accounts on{' '}
-          <NetworkNameStyled>{selectedNetwork}</NetworkNameStyled>.
+          <NetworkNameStyled>{formatNetworkName(selectedNetwork)}</NetworkNameStyled>.
         </div>
       ) : (
         <>
