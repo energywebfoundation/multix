@@ -8,12 +8,6 @@ on:
       - 'packages/ui/**/*'
       - '.github/workflows/deploy-ui.yml'
   workflow_dispatch:
-    inputs:
-      branch:
-        description: 'Branch to deploy from'
-        required: false
-        type: string
-        default: 'main'
 
 jobs:
   deploy:
@@ -26,8 +20,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.inputs.branch || github.ref }}
 
       - name: Configure AWS credentials for Cloudfront & S3
         uses: aws-actions/configure-aws-credentials@v4
@@ -71,11 +63,19 @@ jobs:
 
       - name: Invalidate CloudFront cache
         run: |
-          INVALIDATION_ID=$(aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_ID }} --paths '/*' --query 'Invalidation.Id' --output text); while [[ $(aws cloudfront get-invalidation --distribution-id ${{ secrets.CLOUDFRONT_ID }} --id $INVALIDATION_ID --query 'Invalidation.Status' --output text) != "Completed" ]]; do echo "Waiting for invalidation to complete..."; sleep 30; done; echo "Invalidation completed."
+          if [ -z "${{ secrets.CLOUDFRONT_ID }}" ]; then
+            echo "Error: CLOUDFRONT_ID secret is not set"
+            exit 1
+          fi
+          INVALIDATION_ID=$(aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_ID }} --paths '/*' --query 'Invalidation.Id' --output text)
+          echo "Created invalidation: $INVALIDATION_ID"
+          while [[ $(aws cloudfront get-invalidation --distribution-id ${{ secrets.CLOUDFRONT_ID }} --id $INVALIDATION_ID --query 'Invalidation.Status' --output text) != "Completed" ]]; do
+            echo "Waiting for invalidation to complete..."
+            sleep 30
+          done
+          echo "Invalidation completed."
 
       - name: Deployment summary
         run: |
           echo "## Deployment Complete" >> $GITHUB_STEP_SUMMARY
-          echo "- **S3 Bucket:** ${{ secrets.BUCKET_NAME }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **CloudFront Distribution:** ${{ secrets.CLOUDFRONT_ID }}" >> $GITHUB_STEP_SUMMARY
           echo "- **URL:** https://multix.energywebx.com" >> $GITHUB_STEP_SUMMARY
