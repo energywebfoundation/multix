@@ -6,21 +6,12 @@ interface useGetEDProps {
 }
 
 export const useGetED = ({ withPplApi = false }: useGetEDProps) => {
-  const { api, compatibilityToken, chainInfo } = useAnyApi({ withPplApi })
+  const { api, compatibilityToken } = useAnyApi({ withPplApi })
   const existentialDeposit = useMemo(() => {
     if (!api || !compatibilityToken) return
 
-    const ed = api.constants.Balances.ExistentialDeposit(compatibilityToken)
-    // #region agent log
-    console.log('[DEBUG useGetED] Existential deposit fetched:', {
-      existentialDeposit: ed?.toString(),
-      hasCompatibilityToken: !!compatibilityToken,
-      tokenSymbol: chainInfo?.tokenSymbol,
-      withPplApi: withPplApi
-    });
-    // #endregion
-    return ed
-  }, [api, compatibilityToken, chainInfo, withPplApi])
+    return api.constants.Balances.ExistentialDeposit(compatibilityToken)
+  }, [api, compatibilityToken])
 
   return { existentialDeposit }
 }
