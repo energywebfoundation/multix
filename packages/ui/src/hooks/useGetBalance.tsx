@@ -21,7 +21,7 @@ export const useGetBalance = ({
   const { existentialDeposit } = useGetED({ withPplApi })
 
   useEffect(() => {
-    if (!api || !address || !existentialDeposit) return
+    if (!api || !address || existentialDeposit === undefined) return
 
     const unsub = api.query.System.Account.watchValue(address, 'best').subscribe(
       ({ data: { free, frozen, reserved } }) => {
