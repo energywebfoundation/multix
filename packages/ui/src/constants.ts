@@ -259,7 +259,7 @@ export const networkList: Record<string, NetworkInfo> = {
     ],
     httpGraphqlUrl: 'https://multix-graphql.energywebx.com/graphql',
     networkLogo: nodesEwxSVG,
-    descriptor: 'dot',
+    descriptor: 'ewx',
     genesisHash: '0x5a51e04b88a4784d205091aa7bada002f3e5da3045e5b05655ee4db2589c33b5'
   },
   // interlay: {
@@ -381,7 +381,7 @@ export const networkList: Record<string, NetworkInfo> = {
     ],
     httpGraphqlUrl: 'https://multix-graphql.energywebx.com/graphql',
     networkLogo: nodesPexSVG,
-    descriptor: 'paseo',
+    descriptor: 'pex',
     genesisHash: '0x466edf864b4314b97f36e45ec21ddb39e0bdc52789377b91be0957d5afad2eb2'
   },
   // amplitude: {

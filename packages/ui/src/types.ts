@@ -77,7 +77,9 @@ import {
   ksmPpl,
   pasPpl,
   wesPpl,
-  tanssi
+  tanssi,
+  ewx,
+  pex
 } from '@polkadot-api/descriptors'
 
 export const DESCRIPTORS = {
@@ -99,14 +101,17 @@ export const DESCRIPTORS = {
   ksmPpl,
   pasPpl,
   wesPpl,
-  tanssi
+  tanssi,
+  ewx,
+  pex
 } as const
 
 export const DESCRIPTORS_NOT_HYDRATION_1_3 = {
   acala,
   bifrostDot,
   dot,
-  dotAssetHub
+  dotAssetHub,
+  ewx
 } as const
 
 export const DESCRIPTORS_NOT_HYDRATION_2_3 = {
@@ -114,7 +119,8 @@ export const DESCRIPTORS_NOT_HYDRATION_2_3 = {
   ksmAssetHub,
   dancelight,
   paseo,
-  tanssi
+  tanssi,
+  pex
 } as const
 
 export const DESCRIPTORS_NOT_HYDRATION_3_3 = {
@@ -138,8 +144,8 @@ export const DESCRIPTORS_RELAYS = {
   westend
 }
 
-export const DESCRIPTORS_1_3 = { acala, bifrostDot, dot, dotAssetHub, hydration } as const
-export const DESCRIPTORS_2_3 = { ksm, ksmAssetHub, paseo, dancelight, tanssi } as const
+export const DESCRIPTORS_1_3 = { acala, bifrostDot, dot, dotAssetHub, hydration, ewx } as const
+export const DESCRIPTORS_2_3 = { ksm, ksmAssetHub, paseo, dancelight, tanssi, pex } as const
 export const DESCRIPTORS_3_3 = { polimec, westend } as const
 
 export type ApiDescriptors = keyof typeof DESCRIPTORS

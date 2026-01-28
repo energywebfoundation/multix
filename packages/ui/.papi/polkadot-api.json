@@ -97,6 +97,18 @@
       "metadata": ".papi/metadata/tanssi.scale",
       "genesis": "0xdd6d086f75ec041b66e20c4186d327b23c8af244c534a2418de6574e8c041a60",
       "codeHash": "0x9324e6b036f6478ee50e4a122fd77af6ce8ba71e00108ccd330b36e2f7f1734f"
+    },
+    "ewx": {
+      "wsUrl": "wss://public-rpc.mainnet.energywebx.com",
+      "metadata": ".papi/metadata/ewx.scale",
+      "genesis": "0x5a51e04b88a4784d205091aa7bada002f3e5da3045e5b05655ee4db2589c33b5",
+      "codeHash": "0xb71da8d2f5fd7fccddb248bf90371e1682b80f5d6d0e435070998e926f644627"
+    },
+    "pex": {
+      "wsUrl": "wss://public-rpc.testnet.energywebx.com",
+      "metadata": ".papi/metadata/pex.scale",
+      "genesis": "0x466edf864b4314b97f36e45ec21ddb39e0bdc52789377b91be0957d5afad2eb2",
+      "codeHash": "0xb71da8d2f5fd7fccddb248bf90371e1682b80f5d6d0e435070998e926f644627"
     }
   }
 }
