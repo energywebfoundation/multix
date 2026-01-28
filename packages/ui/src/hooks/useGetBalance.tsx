@@ -27,6 +27,18 @@ export const useGetBalance = ({
       ({ data: { free, frozen, reserved } }) => {
         const res = free - bigIntMax(frozen - reserved, existentialDeposit)
         const transferable = res < 0n ? 0n : res
+        // #region agent log
+        console.log('[DEBUG useGetBalance] Balance calculated:', {
+          address: address,
+          free: free.toString(),
+          frozen: frozen.toString(),
+          reserved: reserved.toString(),
+          existentialDeposit: existentialDeposit.toString(),
+          resBeforeCheck: res.toString(),
+          transferable: transferable.toString(),
+          chainId: chainInfo?.chainId
+        });
+        // #endregion
         setBalance(transferable)
         setFormattedBalance(
           formatBigIntBalance(transferable, chainInfo?.tokenDecimals, {

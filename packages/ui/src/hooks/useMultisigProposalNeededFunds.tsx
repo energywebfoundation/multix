@@ -20,6 +20,17 @@ export const useMultisigProposalNeededFunds = ({
   const [reserved, setReserved] = useState(0n)
 
   useEffect(() => {
+    // #region agent log
+    console.log('[DEBUG useMultisigProposalNeededFunds] Entry:', {
+      hasApi: !!api,
+      signatoriesLength: signatories?.length,
+      hasCompatibilityToken: !!compatibilityToken,
+      hasChainInfo: !!chainInfo,
+      threshold: threshold,
+      hasCall: !!call,
+      chainId: chainInfo?.chainId
+    });
+    // #endregion
     if (!api || !signatories || signatories.length < 2 || !compatibilityToken) return
 
     if (!chainInfo?.tokenDecimals) return
@@ -30,6 +41,14 @@ export const useMultisigProposalNeededFunds = ({
 
     const multisigDepositBase = api.constants.Multisig.DepositBase(compatibilityToken)
     const multisigDepositFactor = api.constants.Multisig.DepositFactor(compatibilityToken)
+    // #region agent log
+    console.log('[DEBUG useMultisigProposalNeededFunds] Constants:', {
+      multisigDepositBase: multisigDepositBase?.toString(),
+      multisigDepositFactor: multisigDepositFactor?.toString(),
+      threshold: threshold,
+      chainId: chainInfo?.chainId
+    });
+    // #endregion
 
     if (!multisigDepositFactor || !multisigDepositBase) return
 
@@ -37,6 +56,14 @@ export const useMultisigProposalNeededFunds = ({
       .getEstimatedFees('5CXQZrh1MSgnGGCdJu3tqvRfCv7t5iQXGGV9UKotrbfhkavs')
       .then((info) => {
         const reservedTemp = multisigDepositFactor * BigInt(threshold) + multisigDepositBase
+        // #region agent log
+        console.log('[DEBUG useMultisigProposalNeededFunds] Fee estimation:', {
+          estimatedFee: info.toString(),
+          reservedAmount: reservedTemp.toString(),
+          totalMin: (reservedTemp + info).toString(),
+          chainId: chainInfo?.chainId
+        });
+        // #endregion
         setMin(reservedTemp + info)
         setReserved(reservedTemp)
       })
