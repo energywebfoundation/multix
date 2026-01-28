@@ -123,7 +123,7 @@ jobs:
           tags: ${{ steps.docker-tags.outputs.tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
 
       - name: Create GitHub Release (main branch only)
         if: github.ref == 'refs/heads/main' && github.event_name == 'push' && steps.build.outcome == 'success'

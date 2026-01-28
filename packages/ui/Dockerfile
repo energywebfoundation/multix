@@ -13,6 +13,8 @@ RUN apk add --no-cache python3 make g++ && \
 # Copy repository (use .dockerignore at repo root to exclude unneeded files)
 COPY . .
 
+ENV CYPRESS_INSTALL_BINARY=0
+
 # Install dependencies (from repo root for workspaces)
 RUN corepack enable && yarn install --immutable
 
