@@ -36,7 +36,7 @@ export const useGetBalance = ({
           existentialDeposit: existentialDeposit.toString(),
           resBeforeCheck: res.toString(),
           transferable: transferable.toString(),
-          chainId: chainInfo?.chainId
+          tokenSymbol: chainInfo?.tokenSymbol
         });
         // #endregion
         setBalance(transferable)

@@ -28,7 +28,7 @@ export const useMultisigProposalNeededFunds = ({
       hasChainInfo: !!chainInfo,
       threshold: threshold,
       hasCall: !!call,
-      chainId: chainInfo?.chainId
+      tokenSymbol: chainInfo?.tokenSymbol
     });
     // #endregion
     if (!api || !signatories || signatories.length < 2 || !compatibilityToken) return
@@ -46,7 +46,7 @@ export const useMultisigProposalNeededFunds = ({
       multisigDepositBase: multisigDepositBase?.toString(),
       multisigDepositFactor: multisigDepositFactor?.toString(),
       threshold: threshold,
-      chainId: chainInfo?.chainId
+      tokenSymbol: chainInfo?.tokenSymbol
     });
     // #endregion
 
@@ -61,7 +61,7 @@ export const useMultisigProposalNeededFunds = ({
           estimatedFee: info.toString(),
           reservedAmount: reservedTemp.toString(),
           totalMin: (reservedTemp + info).toString(),
-          chainId: chainInfo?.chainId
+          tokenSymbol: chainInfo?.tokenSymbol
         });
         // #endregion
         setMin(reservedTemp + info)

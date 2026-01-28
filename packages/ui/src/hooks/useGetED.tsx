@@ -15,7 +15,7 @@ export const useGetED = ({ withPplApi = false }: useGetEDProps) => {
     console.log('[DEBUG useGetED] Existential deposit fetched:', {
       existentialDeposit: ed?.toString(),
       hasCompatibilityToken: !!compatibilityToken,
-      chainId: chainInfo?.chainId,
+      tokenSymbol: chainInfo?.tokenSymbol,
       withPplApi: withPplApi
     });
     // #endregion
