@@ -1,0 +1,26 @@
+# Used when building multix-ui (context: repo root, file: packages/ui/Dockerfile)
+# Exclude files not needed for UI build to speed up COPY and reduce context size
+
+.git
+.github
+node_modules
+**/node_modules
+**/build
+**/lib
+*.log
+.env
+.env.*
+*.tsbuildinfo
+
+# Squid package not needed for UI build
+squid
+
+# Cypress artifacts
+packages/ui/cypress/screenshots
+packages/ui/cypress/videos
+packages/ui/cypress/downloads
+
+# IDE and OS
+.idea
+.vscode
+.DS_Store

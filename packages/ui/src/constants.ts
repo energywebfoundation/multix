@@ -253,9 +253,7 @@ export const networkList: Record<string, NetworkInfo> = {
     chainId: 'energywebx',
     explorerNetworkName: 'energywebx',
     rpcUrls: [
-      'wss://public-rpc.mainnet.energywebx.com',
-      'wss://wnp-rpc.mainnet.energywebx.com',
-      'wss://wns-rpc.mainnet.energywebx.com',
+      'wss://rpc.mainnet.energywebx.com'
     ],
     httpGraphqlUrl: 'https://multix-graphql.energywebx.com/graphql',
     networkLogo: nodesEwxSVG,
@@ -374,10 +372,9 @@ export const networkList: Record<string, NetworkInfo> = {
   },
   'energywebx-paseo': {
     chainId: 'energywebx-paseo',
-    explorerNetworkName: 'energywebx-paseo',
+    explorerNetworkName: 'energywebx-testnet',
     rpcUrls: [
-      'wss://public-rpc.testnet.energywebx.com',
-      'wss://wnp-rpc.testnet.energywebx.com'
+      'wss://rpc.testnet.energywebx.com'
     ],
     httpGraphqlUrl: 'https://multix-graphql.energywebx.com/graphql',
     networkLogo: nodesPexSVG,
