@@ -117,7 +117,7 @@ const ProposalSigning = ({ onClose, className, request, onSuccess }: SigningModa
   })
 
   const minBalance = useMemo(() => {
-    if (!existentialDeposit || !multisigProposalNeededFunds) return
+    if (existentialDeposit === undefined || !multisigProposalNeededFunds) return
 
     return multisigProposalNeededFunds + existentialDeposit
   }, [existentialDeposit, multisigProposalNeededFunds])

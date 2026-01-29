@@ -127,7 +127,7 @@ const Send = ({ onClose, className, onSuccess, onFinalized, preselected }: Props
     withPplApi
   })
   const minBalance = useMemo(() => {
-    if (!existentialDeposit || !multisigProposalNeededFunds) return
+    if (existentialDeposit === undefined || !multisigProposalNeededFunds) return
 
     return multisigProposalNeededFunds + existentialDeposit
   }, [existentialDeposit, multisigProposalNeededFunds])
@@ -426,7 +426,7 @@ export default styled(Send)(
   .buttonContainer {
     text-align: right;
     margin-top: 1rem;
-    button { 
+    button {
       margin-left: auto;
     }
   }

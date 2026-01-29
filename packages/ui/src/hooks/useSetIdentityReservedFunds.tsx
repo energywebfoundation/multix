@@ -31,7 +31,7 @@ export const useSetIdentityReservedFunds = (identityFields?: IdentityFields) => 
 
       const basicDeposit = pplApi.constants?.Identity.BasicDeposit(pplCompatibilityToken)
 
-      if (!basicDeposit || !byteDeposit) return
+      if (basicDeposit === undefined || byteDeposit === undefined) return
 
       const reservedFields = byteDeposit * BigInt(fieldBytes)
 

@@ -13,7 +13,7 @@ export const usePureProxyCreationNeededFunds = () => {
     const depositBase = api.constants.Proxy.ProxyDepositBase(compatibilityToken)
     const depositFactor = api.constants.Proxy.ProxyDepositFactor(compatibilityToken)
 
-    if (!existentialDeposit || !depositBase || !depositFactor) return
+    if (existentialDeposit === undefined || depositBase === undefined || depositFactor === undefined) return
     // if (!chainInfo?.tokenDecimals) return
 
     // we only create one proxy here

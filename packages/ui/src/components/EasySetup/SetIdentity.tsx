@@ -160,7 +160,7 @@ const SetIdentity = ({ className, onSetExtrinsic, from, onSetErrorMessage }: Pro
     withPplApi: true
   })
   const minOriginBalanceDisplay = useMemo(() => {
-    if (!existentialDeposit || !identityReservedFunds) return
+    if (existentialDeposit === undefined || !identityReservedFunds) return
 
     return identityReservedFunds + existentialDeposit
   }, [existentialDeposit, identityReservedFunds])

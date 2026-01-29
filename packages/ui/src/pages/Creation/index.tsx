@@ -183,25 +183,11 @@ const MultisigCreation = ({ className }: Props) => {
     const otherSignatories = getSortAddress(
       signatories.filter((sig) => sig !== selectedAccount.address)
     )
-    const proxyTx =
-      (isContextIn(ctx, allDescriptorsKey_1_3) &&
-        ctx.api.tx.Proxy.create_pure({
-          proxy_type: Enum('Any'),
-          delay: 0,
-          index: 0
-        })) ||
-      (isContextIn(ctx, allDescriptorsKey_2_3) &&
-        ctx.api.tx.Proxy.create_pure({
-          proxy_type: Enum('Any'),
-          delay: 0,
-          index: 0
-        })) ||
-      (isContextIn(ctx, allDescriptorsKey_3_3) &&
-        ctx.api.tx.Proxy.create_pure({
-          proxy_type: Enum('Any'),
-          delay: 0,
-          index: 0
-        }))
+    const proxyTx = (ctx.api as any).tx.Proxy.create_pure({
+      proxy_type: Enum('Any'),
+      delay: 0,
+      index: 0
+    }) as Transaction<any, any, any, any>
 
     if (!proxyTx) return
 
@@ -214,16 +200,10 @@ const MultisigCreation = ({ className }: Props) => {
     })
 
     // Some funds are needed on the multisig for the pure proxy creation
-    const transferTx = isContextOf(ctx, 'hydration')
-      ? ctx.api.tx.Balances.transfer_keep_alive({
-          dest: multiAddress,
-          value: pureProxyCreationNeededFunds
-        })
-      : isContextIn(ctx, noHydrationKeys) &&
-        ctx.api.tx.Balances.transfer_keep_alive({
-          dest: MultiAddress.Id(multiAddress),
-          value: pureProxyCreationNeededFunds
-        })
+    const transferTx = (ctx.api as any).tx.Balances.transfer_keep_alive({
+      dest: isContextOf(ctx, 'hydration') ? multiAddress : MultiAddress.Id(multiAddress),
+      value: pureProxyCreationNeededFunds
+    }) as Transaction<any, any, any, any>
 
     if (!multiSigProxyCall) {
       console.error('multiSigProxyCall is undefined in Creation index.tsx')
@@ -236,9 +216,9 @@ const MultisigCreation = ({ className }: Props) => {
     }
 
     setBatchCall(
-      ctx.api.tx.Utility.batch_all({
+      (ctx.api as any).tx.Utility.batch_all({
         calls: [transferTx.decodedCall, multiSigProxyCall.decodedCall]
-      })
+      }) as Transaction<any, any, any, any>
     )
   }, [
     api,

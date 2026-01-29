@@ -31,7 +31,7 @@ export const useMultisigProposalNeededFunds = ({
     const multisigDepositBase = api.constants.Multisig.DepositBase(compatibilityToken)
     const multisigDepositFactor = api.constants.Multisig.DepositFactor(compatibilityToken)
 
-    if (!multisigDepositFactor || !multisigDepositBase) return
+    if (multisigDepositFactor === undefined || multisigDepositBase === undefined) return
 
     call
       .getEstimatedFees('5CXQZrh1MSgnGGCdJu3tqvRfCv7t5iQXGGV9UKotrbfhkavs')
