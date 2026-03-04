@@ -111,7 +111,10 @@ const getExtDecoderAt = async (
         .then((x) => {
           return opaqueMetadata('value' in x ? x.value : x.result)[1]
         })
-        .catch(console.error)
+        .catch(err => {
+          console.error('archive_call metadata error, fallback to latest metadata', err);
+          return api.apis.Metadata.metadata()
+        })
     : api.apis.Metadata.metadata())
 
   if (!rawMetadata) return
